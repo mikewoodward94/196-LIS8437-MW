@@ -1,0 +1,13 @@
+{
+    "Servers": {
+        "1": {
+            "Name": "CSC",
+            "Group": "Production",
+            "Port": 5432,
+            "Username": "admin",
+            "Host": "postgres",
+            "SSLMode": "prefer",
+            "MaintenanceDB": "csc"
+        }
+    }
+}

@@ -1,0 +1,45 @@
+services:
+
+  postgres:
+    container_name: postgres
+    image: postgres:16
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PW}
+      - POSTGRES_DB=${POSTGRES_DB}
+    expose:   
+      - 5432
+    ports:
+      - 5432:5432
+    volumes:
+      - ./init-scripts:/docker-entrypoint-initdb.d
+      - ${POSTGRES_DATA_DIR}:/var/lib/postgresql/data
+    networks:
+      - backend
+    command: [ "postgres", "-c", "listen_addresses=*" ]
+    restart: always
+
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4:8.4
+    depends_on:
+      - postgres
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_MAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PW}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PW}
+    ports:
+      - ${PGADMIN_PORT}:80
+    restart: always
+    volumes:
+      - ${PGADMIN_SERVER_CONFIG_PATH}:/pgadmin4/servers.json
+    networks:
+      - backend
+      - frontend
+      
+networks:
+  backend:
+    driver: bridge
+  frontend:
+    driver: bridge
