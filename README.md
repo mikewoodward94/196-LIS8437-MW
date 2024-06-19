@@ -31,13 +31,14 @@ These are roughly divided into **Setup** and **Development**:
 These set of tasks are focused on general setup and familiarity with `git`, GitHub, Docker, etc.
 
 #### General
-- [ ] Clone this repository to your GitHub account.
+- [ ] Fork this repository to your GitHub account i.e., any changes you make will be isolated to your account's copy of the repository rather than the original.
 - [ ] Rename the repository so that the initials of your first and last names are added as a suffix e.g., for "Jane Doe", it should be 196-LIS8437-JD.
 - [ ] Grant the following users access to this renamed repository in your GitHub account so we can view the committed code, directory, file, etc. changes by the deadline.
   - [ ] [dangerdika](https://github.com/dangerdika)
   - [ ] [tomaroberts](https://github.com/tomaroberts)
   - [ ] [AnilMistry](https://github.com/AnilMistry)
   - [ ] [heyhaleema](https://github.com/heyhaleema)
+- [ ] Clone the forked, renamed repository in your GitHub account to your local machine.
 - [ ] Create a Python virtual environment on your local machine to use for development in a `venv` directory i.e., `196-LIS8437-JD/venv/<your_virtual_environment>`.
 - [ ] Create a `requirements.txt` file i.e., so you can add any packages that you have installed and use for development.
 - [ ] Build the 196-LIS8437 Docker container by running `docker compose up -d --build` from the repository's root directory on your local machine.
