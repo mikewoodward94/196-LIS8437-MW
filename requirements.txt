@@ -3,3 +3,4 @@ python-dotenv==1.0.1
 psycopg2-binary==2.9.9
 pandas==2.2.2
 numpy==2.0.0
+pydicom==2.4.4

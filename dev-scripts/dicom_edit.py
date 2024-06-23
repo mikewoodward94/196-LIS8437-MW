@@ -1,3 +1,4 @@
+import os
 import configparser
 from pathlib import Path
 import requests
@@ -5,6 +6,7 @@ import json
 import pandas as pd
 import numpy as np
 from datetime import date, timedelta
+import pydicom
 
 def retrieve_dicom(xnat_configuration: dict,
                    subject_id: str,
@@ -14,7 +16,7 @@ def retrieve_dicom(xnat_configuration: dict,
     Retrieves specified dicom headers and their values from xnat.
     '''
 
-    url = "{}/data/services/dicomdump?src=/archive/projects/{}/subjects/{}/experiments/{}/scans/{}&field=StudyDate&field=AcquisitionDate&field=InstanceCreationDate&field=ContentDate&field=StudyTime&field=AcquisitionTime&field=InstanceCreationTime&field=ContentTime&field=StudyDescription".format(
+    url = "{}/data/services/dicomdump?src=/archive/projects/{}/subjects/{}/experiments/{}/scans/{}&field=StudyDate&field=AcquisitionDate&field=InstanceCreationDate&field=ContentDate&field=StudyTime&field=AcquisitionTime&field=InstanceCreationTime&field=ContentTime&field=StudyDescription&field=SOPInstanceUID".format(
                 xnat_configuration["server"],
                 xnat_configuration["project"], 
                 subject_id,
@@ -41,6 +43,24 @@ def edit_dicom(df: pd.DataFrame) -> pd.DataFrame:
         lambda x: (pd.to_datetime(x) + timedelta(days=11)).strftime('%Y%m%d') if pd.to_datetime(x, errors='coerce') is not pd.NaT else x)
     df["value"] = np.where(df["desc"] == "Study Description", "This is a test study description.", df["value"])
     return(df)
+
+def update_original_dicom_and_upload(edited_df: pd.DataFrame) -> None:
+    '''
+    Takes the edited dicom tags, matches up and edits original dicom file.
+    Uploads to XNAT
+    '''
+    for filename in os.listdir("xnat/data/"):
+        if filename.endswith(".dcm"):
+            dataset = pydicom.dcmread("xnat/data/" + filename)
+            ### Pseudocode
+            '''
+            Match up unique identifier from edited dicom tags to relate to original dicom file
+            Use this to change the relevant dicom tags
+            Output these edited dicom files to a new folder
+            Upload this folder to xnat specifying same subject but different session.
+            '''
+            
+
 
 if __name__ == "__main__":
 
@@ -69,3 +89,5 @@ if __name__ == "__main__":
         edited_dicom_tags.append(scan_df_edited)
     
     edited_dicom_tags = pd.concat(edited_dicom_tags)
+    
+    update_original_dicom_and_upload(edited_dicom_tags)
